@@ -1,0 +1,5 @@
+deploy/sing-box/config.json
+deploy/caddy/Caddyfile
+backups/
+secrets/*
+!secrets/monitor-ui.env.example

@@ -1,0 +1,28 @@
+{
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "inbounds": [
+    {
+      "type": "shadowsocks",
+      "tag": "ss2022-in",
+      "listen": "::",
+      "listen_port": 443,
+      "network": "tcp",
+      "method": "2022-blake3-aes-128-gcm",
+      "password": "__SS2022_PASSWORD__",
+      "multiplex": {
+        "enabled": true
+      }
+    }
+  ],
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "external_ui": "/var/lib/sing-box/ui",
+      "secret": "__CLASH_API_SECRET__",
+      "access_control_allow_private_network": true
+    }
+  }
+}

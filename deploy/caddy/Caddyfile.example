@@ -1,0 +1,20 @@
+{
+	auto_https disable_redirects
+}
+
+YOUR_HOST_OR_IP:8443 {
+	tls internal
+	header {
+		-Server
+		Cache-Control "no-store"
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+	}
+	basicauth {
+		YOUR_DASHBOARD_USER YOUR_BCRYPT_HASH
+	}
+	reverse_proxy 127.0.0.1:9090 {
+		header_up Authorization "Bearer YOUR_CLASH_API_SECRET"
+	}
+}
