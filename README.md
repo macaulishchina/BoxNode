@@ -1,4 +1,4 @@
-# sing-box-ss2022-node
+# BoxNode
 
 Single-host `Shadowsocks 2022` deployment with:
 
@@ -32,6 +32,7 @@ This host is currently running:
 - `secrets/monitor-ui.env.example`: example monitoring secrets file
 - `scripts/install-sing-box.sh`: install `sing-box`
 - `scripts/deploy-sing-box.sh`: validate and deploy `sing-box`
+- `scripts/bootstrap.sh`: interactive one-click install and deploy with defaults
 - `scripts/show-client-info.sh`: print current client parameters and `ss://` URI
 - `scripts/rotate-ss-password.sh`: rotate the Shadowsocks password
 - `scripts/patch-monitor-ui.sh`: patch the downloaded UI for public IP access
@@ -50,6 +51,35 @@ These files exist locally but are git-ignored because they contain live credenti
 To recreate them on another host, start from the example files in this repository.
 
 ## Quick Start
+
+1. Run the one-click bootstrap script as root:
+
+```bash
+sudo /root/vpn_server/scripts/bootstrap.sh
+```
+
+It will:
+
+- prompt for the required options and accept defaults when you press Enter
+- install `sing-box`, `caddy`, `openssl`, and `python3`
+- optionally install `qrencode`
+- generate the local runtime config files under `/root/vpn_server`
+- deploy `sing-box` and `caddy`
+- optionally patch the dashboard UI for raw-IP HTTPS access
+- print the client URI and dashboard credentials at the end
+
+2. For unattended deployment, pass `-y` or preseed environment variables:
+
+```bash
+sudo SS_PORT=443 DASHBOARD_HOST=1.2.3.4 DASHBOARD_PORT=8443 \
+  DASHBOARD_USER=admin DASHBOARD_PASS='strong-password' \
+  SS_PASSWORD='another-strong-password' CLASH_API_SECRET='hex-secret' \
+  /root/vpn_server/scripts/bootstrap.sh -y
+```
+
+3. If you prefer the old manual flow, see [DEPLOYMENT.md](/root/vpn_server/docs/DEPLOYMENT.md).
+
+## Manual Flow
 
 1. Copy the example files:
 

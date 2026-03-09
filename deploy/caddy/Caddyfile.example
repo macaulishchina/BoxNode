@@ -14,7 +14,33 @@ YOUR_HOST_OR_IP:8443 {
 	basicauth {
 		YOUR_DASHBOARD_USER YOUR_BCRYPT_HASH
 	}
-	reverse_proxy 127.0.0.1:9090 {
-		header_up Authorization "Bearer YOUR_CLASH_API_SECRET"
+	@root path /
+	redir @root /ui/ 307
+	@rules path /ui/rules
+	handle @rules {
+		header Content-Type application/json
+		respond "{\"rules\":[]}" 200
+	}
+	@rules_providers path /ui/providers/rules
+	handle @rules_providers {
+		header Content-Type application/json
+		respond "{\"providers\":{}}" 200
+	}
+	@rules_provider_update path_regexp rules_provider_update ^/ui/providers/rules/.+$
+	handle @rules_provider_update {
+		respond "" 204
+	}
+	@ui_api path /ui/version /ui/configs /ui/traffic /ui/memory /ui/connections /ui/logs /ui/proxies /ui/providers /ui/rules
+	handle @ui_api {
+		uri strip_prefix /ui
+		reverse_proxy 127.0.0.1:9090 {
+			header_up Authorization "Bearer YOUR_CLASH_API_SECRET"
+		}
+	}
+	@ui_static path /ui /ui/ /ui/assets/* /ui/*.js /ui/*.css /ui/*.png /ui/*.ico /ui/*.svg /ui/*.webmanifest /ui/*.txt
+	handle @ui_static {
+		reverse_proxy 127.0.0.1:9090 {
+			header_up Authorization "Bearer YOUR_CLASH_API_SECRET"
+		}
 	}
 }

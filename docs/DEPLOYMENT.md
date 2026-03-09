@@ -2,6 +2,40 @@
 
 This guide documents the current layout used on the host and how to reproduce it safely on another Ubuntu/Debian server.
 
+## Recommended: One-Click Bootstrap
+
+Run:
+
+```bash
+sudo /root/vpn_server/scripts/bootstrap.sh
+```
+
+The bootstrap script prompts for the necessary values, accepts defaults when you press Enter, installs the required packages, renders the runtime config files, deploys `sing-box` and `caddy`, and prints the client and dashboard access info at the end.
+
+Optional unattended mode:
+
+```bash
+sudo SS_PORT=443 DASHBOARD_HOST=1.2.3.4 DASHBOARD_PORT=8443 \
+  DASHBOARD_USER=admin DASHBOARD_PASS='strong-password' \
+  SS_PASSWORD='another-strong-password' CLASH_API_SECRET='hex-secret' \
+  /root/vpn_server/scripts/bootstrap.sh -y
+```
+
+Useful environment variables:
+
+- `SS_PORT`
+- `DASHBOARD_HOST`
+- `DASHBOARD_PORT`
+- `DASHBOARD_USER`
+- `DASHBOARD_PASS`
+- `SS_PASSWORD`
+- `CLASH_API_SECRET`
+- `INSTALL_QRENCODE=yes|no`
+- `CONFIGURE_UFW=yes|no`
+- `PATCH_UI=yes|no`
+
+The manual process below is still available if you want to manage each step yourself.
+
 ## Architecture
 
 - `sing-box` listens for `Shadowsocks 2022` client traffic.
